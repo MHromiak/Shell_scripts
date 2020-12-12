@@ -56,7 +56,6 @@ done
 len=${#matches[@]}
 
 if [ $len -eq 1 ]; then
-	echo "Got it!"
 	cd "${matches[0]}"
 elif [ $len -eq 0 ]; then
 	echo "No matches found within $depth subdirectories"
