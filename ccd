@@ -1,0 +1,92 @@
+#!/bin/bash
+
+# sysinfo_page - An improved version of cd. Finds all instances of a directory to change into. If it is unique, it changes to the directory. Otherwise, it lists options for the user.
+# !!!This script should be sourced!!!
+
+
+
+h_info() {
+        echo "Searches for a directory named 'goal_dir' up to 'depth' subdirectories deep from the current working directory. Does not include directories with white space or special characters."
+        echo
+        echo "  Syntax: ccd [-h] goal_dir depth"
+        echo
+        echo "  Examples - assuming sourcing is done"
+        echo "          $ ccd Desktop 2"
+        echo "          $ ccd -h"
+        echo 
+        echo "  Examples assuming sourcing is not done"
+        echo "          $ source ccd Desktop 2"
+        echo "          $ . ccd -h"
+
+
+}
+
+
+
+################ CCD Below ###############
+
+
+
+goal_dir=$1
+depth=$2
+matches=()
+
+if [ "$depth" = "" ]; then
+	depth=5;
+fi
+
+
+if [ "$goal_dir" = "-h" ]; then
+	h_info
+	return
+fi
+
+for dir in $(find $(pwd) -maxdepth "${depth}" -type d) 
+  do
+         if [[ -d $dir ]]; then
+                if [ "$(basename "$dir")" = "${goal_dir}" ]; then
+                        matches+=("$dir")
+                        #echo $dir
+                fi
+         fi
+done
+
+
+#echo "${matches[*]}"
+len=${#matches[@]}
+
+if [ $len -eq 1 ]; then
+	echo "Got it!"
+	cd "${matches[0]}"
+elif [ $len -eq 0 ]; then
+	echo "No matches found within $depth subdirectories"
+else
+	for i in $(seq 0 "$(($len - 1))");
+	do
+		echo $i - "${matches[$i]}"
+	done
+
+	#IFS=' ' read -ra line
+	choice="a"
+	nre='^[0-9]+$'
+	until [[ $choice =~ $nre ]] && 
+		[ "$choice" -lt "$len" ] && 
+			 [ "$choice" -ge "0" ];
+	do	
+		#echo
+		echo -n "Multiple matches found. Please choose one (r to refresh options): "
+		IFS=' ' read -ra line
+        	choice="${line[0]}"
+		if [[ "$choice" =~ "r" ]] && [ ${#choice} -eq 1 ] && ! [[ $choice =~ $nre ]]; then
+			echo
+			for i in $(seq 0 "$(($len - 1))");
+        		do
+                		echo $i - "${matches[$i]}"
+        		done
+		fi
+
+	done
+	cd "${matches[$choice]}"
+fi
+
+
