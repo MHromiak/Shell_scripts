@@ -19,9 +19,19 @@ If more than one directory matches, a list of possible choices is provided and t
 
 
 ### MS - Mouse Switch (Primary Buttons Swapping)
-Whenever I plug my usb mouse dongle into my computer running ubuntu 20.04, my mouse settings reset to right-handed. Being left-handed, I wanted to automatically change this. I couldn't figure out visudo and the usr/udev/rules.d rules settings, however, by simply replacing $DEVICE_NAME with the name of your mouse usb (found via xinput -list), you can also easily change your primary button by running:
+Whenever I plug my usb mouse dongle into my computer running ubuntu 20.04, my mouse settings reset to right-handed. Being left-handed, I wanted to automatically change this. I couldn't figure out visudo and the usr/udev/rules.d rules settings; however, by simply replacing $DEVICE_NAME with the name of your mouse usb (found via xinput -list), you can also easily change your primary button by running:
 
 `$ ms`
 
-It's just that easy. No need to source the script, either. Just add to ~/bin and go.
+It's just that easy. No need to source the script, either. Just add to ~/bin after placing your device in and go.
 
+<br></br>
+<br></br>
+
+
+### Upper - System Compliments A La Mode
+Upper is a script to provide the user with compliments provided in the associated `compliments.txt` file in the same /bin directory. Usage is simple:
+
+`$ upper`
+
+Calling upper will both echo the compliment to stdout and generate a system notification via `zenity`. Add more compliments as wanted to `compliments.txt`, and reset `n` to 1 at minimum.
