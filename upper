@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# sysinfo_page - Script to give you compliments every 15 minutes to help you through your day. Change the list as you'd like.
+
+
+
+h_info() {
+        echo Script that reads from "compliments.txt" in the same directory and interate through the compliments, displaying each as a notification. Can be cron\'d to show every 15 minutes.
+
+        echo
+        echo "  Syntax: upper [-h]"
+
+}
+
+
+################### UPPER below #################
+base=0
+TARGET=/home/markian/bin/
+cd $TARGET
+
+num_comps=$(wc -l < compliments.txt)
+n=4;#the variable that I want to be incremented
+
+compliment=$(sed "${n}q;d" compliments.txt)
+echo $compliment
+$(zenity --notification --text="$compliment")
+next_n=$[$n+1]
+
+if [ $n -ge $num_comps ]; then
+	sed -i "/#the variable that I want to be incremented$/s/=.*#/=1;#/" ${0} 
+else
+	sed -i "/#the variable that I want to be incremented$/s/=.*#/=$next_n;#/" ${0}
+fi
+
+
+
+
+
